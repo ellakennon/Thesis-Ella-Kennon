@@ -125,5 +125,14 @@ def get_interactions_vec(interactions, n):
     # Return the interactions matrix
     return np.array(inter_matrix)  
 
+# Remove largest MAE
+# Designed for Lars
+def remove_outliers(df, num_outliers):
+    # Retrieves indices of largest num_outliers mean MAE values (over 5 repeats) by sample_size
+    outlier_idxs = (df.groupby('sample_size')['mae'].mean().nlargest(num_outliers).index)
 
+    # Copy and set outlier(s) indices to NaN
+    no_outliers_df = df.copy()
+    no_outliers_df.loc[no_outliers_df['sample_size'].isin(outlier_idxs), 'mae'] = np.nan
 
+    return no_outliers_df

@@ -11,7 +11,7 @@ class WalshBasis:
     # Returns the Walsh basis for a given x 
     def get_basis(self, x):  
         # Use multiplication @ with interactions matrix and x
-        prod   = self.interactions_nk @ x
+        prod = self.interactions_nk @ x
         # Find parity of multiplication results
         # Parity is whether the amount of 1s in a vector is even (0) or odd (1)
         # Mod 2 to get parity

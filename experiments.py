@@ -157,8 +157,8 @@ def optimization_exp_nk(regression_type, n, k, problem_name, maximize, interacti
 # Runs approximation and optimziation experiments at once
 def experiment_nk(regression_type, n, k, 
                   problem_name, interactions_nk, 
-                  walsh_basis, maximize, 
-                  csv_name, repeats=5):
+                  walsh_basis, csv_name, 
+                  maximize=True, repeats=5):
     
     rows_mae = []
     rows_opt = []

@@ -1,6 +1,6 @@
 import numpy as np
 
-from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 from sklearn.linear_model import LinearRegression, Lasso, LassoCV, Lars, LarsCV, LassoLars, LassoLarsCV
 
 from sklearn.preprocessing import StandardScaler
@@ -29,6 +29,12 @@ class Model:
         # Whether model uses Walsh basis (True or False)
         self.walsh_basis = walsh_basis
 
+        # Normalization factor
+        # self.normalize = np.sqrt(self.interactions_nk.shape[0])
+
+        # self.scaler = StandardScaler(with_mean=False)
+        # self.scaler_fit = False
+
         # Makes polynomial features vector if not Walsh model
         if walsh_basis == False:
             self.poly = PolynomialFeatures(degree=self.k, interaction_only=True, include_bias=False)
@@ -43,7 +49,7 @@ class Model:
             new_x_train = []
             basis = WalshBasis(self.n, self.k, self.interactions_nk)
             for xi in x:
-                xi_basis = basis.get_basis(xi)
+                xi_basis = basis.get_basis(xi) 
                 new_x_train.append(xi_basis)
 
         else:
@@ -55,6 +61,14 @@ class Model:
 
         self.x_train.extend(new_x_train)
         self.y_train.extend(y)
+
+        # if not self.scaler_fit:
+        #     new_scal_x_train = self.scaler.fit_transform(self.x_train)
+        #     self.scaler_fit = True
+        # else:
+        #     new_scal_x_train = self.scaler.transform(self.x_train)
+
+        
 
         self.regression.fit(self.x_train, self.y_train)
 
@@ -71,6 +85,8 @@ class Model:
                 x_test.append(xi_basis)
         else:
             x_test = self.poly.transform(x)
+        
+        # x_test = self.scaler.transform(x_test)
 
         prediction = self.regression.predict(x_test)
 
